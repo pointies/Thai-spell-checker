@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row">
+        <h1 class="text-center">Spell Checker</h1>
+        <h2 class="text-center">ระบบตรวจสอบการสะกดคำ</h2>
+    </div>
+    <div class="row">
+        <h5 class="text-start">ผลลัพธ์</h5>
+    </div>
+    <div class="row">
+        <!-- Left column to display the checked text with highlighted words -->
+        <div class="col-8">
+            <div class="form-control text-start" id="spell-checker">
+                {% for token in result.tokens %}
+                    {%- if token.strip().replace('"', '') in words -%}
+                        <span class="highlight">{{ token }}</span>
+                    {%- else -%}
+                        {{ token }}
+                    {%- endif -%}
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Right column to display suggestions for misspelled words -->
+        <div class="col-4">
+            <div class="accordion" id="accordionExample">
+                {% for item in result.result %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                                {{ item.word }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body text-start">
+                                <p>แนะนำคำที่ถูกต้อง</p>
+                                {% for suggestion in item.suggest %}
+                                    <button type="button" class="btn btn-primary" id="suggest-word" onclick="copy(this, '{{ suggestion }}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Click to copy">{{ suggestion }}</button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <p class="text-start" id="report">พบการสะกดคำผิดจำนวน: {{ result.result | length }} คำ</p>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" id="button" href="{{ url_for('index') }}">กรอกข้อความใหม่</a>
+        </div>
+    </div>
+    <script>
+        // Copy a suggestion word to the clipboard
+        function copy(button, text) {
+            navigator.clipboard.writeText(text);
+            var tooltip = new bootstrap.Tooltip(button, {
+                title: 'Copied!',
+                trigger: 'manual' // Set tooltip trigger to manual
+            });
+            tooltip.show(); // Show the tooltip
+            setTimeout(function() {
+                tooltip.hide(); // Hide the tooltip after a delay
+            }, 800);
+        }
+
+        // Set the first tab as active on the result page
+        document.addEventListener("DOMContentLoaded", function() {
+            var navLinks = document.getElementsByClassName("nav-link");
+            for (var i = 0; i < navLinks.length; i++) {
+                navLinks[i].classList.remove("active");
+            }
+            navLinks[0].classList.add("active");
+        });
+    </script>
+{% endblock %}

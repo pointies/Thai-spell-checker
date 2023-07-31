@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- External scripts and stylesheets -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+    <title>Spell Checker</title>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav nav-tabs">
+                    <a class="nav-link" href="{{ url_for('index') }}" onclick="handleTabClick('index')">ตรวจสอบการสะกดคำ</a>
+                    <a class="nav-link" href="{{ url_for('addToDict') }}" onclick="handleTabClick('addToDict')">เพิ่มคำศัพท์ใหม่</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Main content container -->
+    <div class="container text-center">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <script>
+        var navLinks = document.getElementsByClassName("nav-link");
+        var currentLocation = window.location.pathname;
+    
+        for (var i = 0; i < navLinks.length; i++) {
+            var href = navLinks[i].getAttribute("href");
+            if (currentLocation === href) {
+                navLinks[i].classList.add("active");        // Add 'active' class to the current navigation link
+            } else {
+                navLinks[i].classList.remove("active");     // Remove 'active' class from other navigation links
+            }
+        }
+    </script>
+</body>
+</html>

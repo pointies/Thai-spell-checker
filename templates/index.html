@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row">
+        <h1 class="text-center">Spell Checker</h1>
+        <h2 class="text-center">ระบบตรวจสอบการสะกดคำ</h2>
+    </div>
+    <br>
+    <div class="row">
+        <h5 class="text-start">กรอกข้อความที่ต้องการตรวจสอบ</h5>
+    </div>
+    <div class="form-floating">
+        <form action="{{ url_for('result') }}" method="POST">
+            <div class="row">
+                <textarea class="form-control" id="spell-checker" name="input_text" placeholder="พิมพ์ข้อความที่นี่..." required></textarea>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary" id="button" type="submit" value="ตรวจสอบ">
+                        <i class="bi bi-search"></i>
+                        ตรวจสอบ
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        var button = document.getElementById("button");
+        var textarea = document.getElementById("spell-checker");
+        var originalButtonText = button.innerHTML;
+        button.disabled = false;
+
+        button.addEventListener("click", function() {
+            if (textarea.value.trim() !== "") { // Check if the textarea has non-empty text
+                button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลังตรวจสอบ...';
+                button.disabled = true;
+            }
+        });
+
+        window.addEventListener("pageshow", function(event) {
+            var historyTraversal = event.persisted ||
+                (typeof window.performance != "undefined" &&
+                    window.performance.navigation.type === 2);
+            if (historyTraversal) {
+                // Reset button text and enable the button
+                button.innerHTML = originalButtonText;
+                button.disabled = false;
+            }
+        }, false);
+    </script>
+{% endblock %}

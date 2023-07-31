@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row">
+        <h2 class="text-center">เพิ่มคำศัพท์ใหม่</h2>
+    </div>
+    <br>
+    <form class="input-group" action="{{ url_for('addToDict') }}" method="GET">
+        <input type="text" class="form-control" name="new_word" placeholder="พิมพ์คำศัพท์ที่นี่...">
+        <button class="btn btn-secondary" type="submit" id="button-addon2">เพิ่มคำ</button>
+    </form>
+    <br>
+    {% if success %}
+        <div class="alert alert-success d-flex align-items-center" role="alert" id="successAlert">
+            <div>
+                <i class="bi bi-check-circle-fill"></i>
+                เพิ่ม "{{ new_word }}" เรียบร้อยแล้ว
+            </div>
+        </div>
+    {% elif success == false %}
+        <div class="alert alert-danger d-flex align-items-center" role="alert" id="failureAlert">
+            <div>
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                เพิ่ม "{{ new_word }}" ไม่สำเร็จ
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
